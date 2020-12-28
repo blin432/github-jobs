@@ -1,24 +1,24 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import useFetchJobs from './useFetchJobs';
+import { Container } from './react-bootstrap';
+import Jobs from './Jobs';
 
 function App() {
+  //states
+  const [params, setParams] = useState({})
+  const [page, setPage] = useState(1)
+  const {jobs, loading, error } = useFetchJobs();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      
+      {loading && <h1> loading...</h1>}
+      {error && <h1>Error. Try refreshing</h1>}
+      {jobs.map(job => {
+        return <Jobs key={jobs.id} job = {job}/>
+      })}
+    </Container>
+    
   );
 }
 
