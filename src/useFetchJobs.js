@@ -9,14 +9,14 @@ const ACTIONS = {
     ERROR:'error'
 }
 //cors error url
-const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json'
+const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json';
 
 function reducer(state, action) {
     switch (action.type) {
         case ACTIONS.MAKE_REQUESTS:
             return { loading: true, jobs: [] }
         case ACTIONS.GET_DATA:
-            return { ...state, loading: false, jobs: ACTIONS.payload.jobs }
+            return { ...state, loading: false, jobs: action.payload.jobs }
         case ACTIONS.ERROR:
             return { ...state, loading: false, error: action.payload.error, jobs: [] }
         default:
@@ -33,7 +33,7 @@ export default function useFetchJobs(params, page) {
         dispatch({ type: ACTIONS.MAKE_REQUESTS })
         axios.get(BASE_URL, {
             cancelToken:cancelToken.token,
-            params: {markdown:true, page:page, ...params}
+            params: {markdown:true, page: page, ...params}
         }).then(res => {
             dispatch({type:ACTIONS.GET_DATA, payload:{jobs:res.data}})
         }).catch(e => {
@@ -46,8 +46,5 @@ export default function useFetchJobs(params, page) {
         }
 
     }, [params, page])
-    return {
-        state
-    }
-    
+    return state
 }
